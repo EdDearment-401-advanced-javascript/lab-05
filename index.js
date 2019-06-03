@@ -2,6 +2,16 @@
 
 const fs = require('fs');
 
+const fileType = 0;
+const fileSize= 2;
+const pixelProperty = 10;
+const width = 18;
+const height = 22;
+const bytesPerPixel = 28;
+const color = 54;
+//Fun with colors and things!
+let randomValue = Math.floor(Math.random() * 256);
+
 /**
  * Bitmap -- receives a file name, used in the transformer to note the new buffer
  * @param filePath
@@ -17,8 +27,13 @@ function Bitmap(filePath) {
  */
 Bitmap.prototype.parse = function(buffer) {
   this.buffer = buffer;
-  this.type = buffer.toString('utf-8', 0, 2);
-  //... and so on
+  this.type = buffer.toString('utf-8', fileType, 2);
+  this.size = buffer.readInt32LE(fileSize);
+  this.pixel = buffer.readInt32LE(pixelProperty);
+  this.width = buffer.readInt32LE(width);
+  this.height = buffer.readInt32LE(height);
+  this.bitesPpixal = buffer.readInt32LE(bytesPerPixel);
+  this.color = buffer.readInt32LE(color);
 };
 
 /**
@@ -42,14 +57,24 @@ const transformGreyscale = (bmp) => {
   console.log('Transforming bitmap into greyscale', bmp);
 
   //TODO: Figure out a way to validate that the bmp instance is actually valid before trying to transform it
-
+  console.log('This is the file' , bmp);
   //TODO: alter bmp to make the image greyscale ...
-
+  for (let i =0 ; i < bmp.color.length; i +=4){
+    let grey = (bmp.color[i] + bmp.color[i+1] + bmp.color[i+2]);
+    bmp.color[i] = grey;
+    bmp.color[i+1] = grey;
+    bmp.color[i+2] = grey;
+  }
 };
 
 const doTheInversion = (bmp) => {
   bmp = {};
-}
+  for (let i = 0; i < bmp.color.length; i+=4 ){
+    bmp.color[i] = bmp.color[i+1];
+    bmp.color[i+1] = bmp.color[i+2];
+    bmp.color[i+2] = bmp.color[i];
+  }
+};
 
 /**
  * A dictionary of transformations
@@ -57,7 +82,7 @@ const doTheInversion = (bmp) => {
  */
 const transforms = {
   greyscale: transformGreyscale,
-  invert: doTheInversion
+  invert: doTheInversion,
 };
 
 // ------------------ GET TO WORK ------------------- //
@@ -92,4 +117,3 @@ const [file, operation] = process.argv.slice(2);
 let bitmap = new Bitmap(file);
 
 transformWithCallbacks();
-

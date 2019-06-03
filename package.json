@@ -1,0 +1,27 @@
+{
+  "name": "lab-05",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "lint": "eslint **/*.js",
+    "test": "jest --verbose --coverage",
+    "test-watch": "jest --watchAll --verbose --coverage",
+    "jsdoc": "jsdoc -c ./docs/config/jsdoc.config.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourname-401-advanced-javascript/lab-05.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yourname-401-advanced-javascript/lab-05/issues"
+  },
+  "homepage": "https://github.com/yourname-401-advanced-javascript/lab-05#readme",
+  "dependencies": {
+    "eslint": "^5.16.0",
+    "jest": "^24.8.0"
+  }
+}
